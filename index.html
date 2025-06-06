@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupaMax - Movies, TV Shows & Live TV Streaming</title>
+    <link rel="icon" type="image/x-icon" href="./imgs/favicon/Supermax-2160px.ico">
+    <style>
+        :root {
+            --primary-green: #00c853;
+            --dark-green: #009624;
+            --light-green: #5efc82;
+            --primary-blue: #2962ff;
+            --dark-blue: #0039cb;
+            --light-blue: #768fff;
+            --dark-bg: #121212;
+            --light-bg: #1e1e1e;
+            --text-light: #f5f5f5;
+            --text-gray: #b3b3b3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--dark-blue), var(--dark-green));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--light-green), var(--light-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: auto; /* Push to extreme end */
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        nav ul li {
+            margin-left: 2.5rem;
+        }
+        
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        nav ul li a.nav-download {
+            background-color: var(--primary-green);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px; /* Fully curved sides */
+            transition: all 0.3s;
+        }
+        
+        nav ul li a.nav-download:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 200, 83, 0.3);
+        }
+        
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background-color: var(--dark-blue);
+            padding: 1rem;
+            z-index: 99;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mobile-nav.active {
+            display: block;
+        }
+        
+        .mobile-nav ul {
+            list-style: none;
+        }
+        
+        .mobile-nav ul li {
+            margin-bottom: 1rem;
+        }
+        
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem;
+        }
+        
+        .mobile-nav ul li a.nav-download {
+            background-color: var(--primary-green);
+            padding: 0.8rem;
+            border-radius: 50px;
+            text-align: center;
+            margin-top: 1rem;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--light-green), var(--light-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            color: var(--text-gray);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 200, 83, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid var(--primary-blue);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(41, 98, 255, 0.3);
+        }
+        
+        .features {
+            padding: 4rem 2rem;
+            background-color: var(--light-bg);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--light-green), var(--light-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background-color: var(--dark-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-green);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+        
+        .feature-card p {
+            color: var(--text-gray);
+        }
+        
+        .screenshots {
+            padding: 4rem 2rem;
+            background-color: var(--dark-bg);
+        }
+        
+        .device-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        
+        .device-tab {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--light-bg);
+            border: none;
+            border-radius: 30px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .device-tab.active {
+            background-color: var(--primary-blue);
+        }
+        
+        .device-tab:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        .screenshot-container {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .screenshot-container.active {
+            display: block;
+        }
+        
+        .screenshot-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 2rem;
+            padding: 1rem 0;
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+        }
+        
+        .screenshot-slider::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome/Safari */
+        }
+        
+        .device-frame {
+            flex: 0 0 auto;
+            scroll-snap-align: center;
+            position: relative;
+        }
+        
+        .mobile-frame {
+            width: 300px;
+            border: 12px solid #111;
+            border-radius: 30px;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .mobile-frame::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background: #111;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        
+        .tablet-frame {
+            width: 600px;
+            border: 15px solid #111;
+            border-radius: 20px;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .tablet-frame::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+        }
+        
+        .tv-frame {
+            width: 800px;
+            border: 20px solid #111;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .tv-frame::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 30px;
+            background: #111;
+            border-radius: 5px;
+        }
+        
+        .device-frame img {
+            width: 100%;
+            display: block;
+        }
+        
+        .device-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        
+        .device-tab {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--light-bg);
+            border: none;
+            border-radius: 30px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .device-tab.active {
+            background-color: var(--primary-blue);
+        }
+        
+        .device-tab:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        .screenshot-container {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .screenshot-container.active {
+            display: block;
+        }
+        
+        .device-screenshot {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+        
+        .device-screenshot.active {
+            display: inline-block;
+        }
+        
+        /* Device frame styles */
+        .mobile-frame {
+            max-width: 300px;
+            border: 12px solid #111;
+            border-radius: 30px;
+            position: relative;
+        }
+        
+        .mobile-frame::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background: #111;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        
+        .tablet-frame {
+            max-width: 600px;
+            border: 15px solid #111;
+            border-radius: 20px;
+            position: relative;
+        }
+        
+        .tablet-frame::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+        }
+        
+        .tv-frame {
+            max-width: 800px;
+            border: 20px solid #111;
+            border-radius: 10px;
+            position: relative;
+        }
+        
+        .tv-frame::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 30px;
+            background: #111;
+            border-radius: 5px;
+        }
+        
+        .content-showcase {
+            padding: 4rem 2rem;
+            background-color: var(--light-bg);
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .content-item {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            height: auto;
+            transition: transform 0.3s;
+        }
+        
+        .content-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .content-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .content-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 1rem;
+        }
+        
+        .content-overlay h4 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-overlay p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        .pricing {
+            padding: 4rem 2rem;
+            background-color: var(--dark-bg);
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background-color: var(--light-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .pricing-card.popular {
+            border: 2px solid var(--primary-green);
+            position: relative;
+        }
+        
+        .popular-tag {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background-color: var(--primary-green);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: var(--text-gray);
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 0.8rem;
+            color: var(--text-gray);
+        }
+        
+        .download {
+            padding: 4rem 2rem;
+            background-color: var(--light-bg);
+            text-align: center;
+        }
+        
+        .download h2 {
+            margin-bottom: 2rem;
+        }
+        
+        .custom-download-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+        }
+        
+        .custom-download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(41, 98, 255, 0.5);
+        }
+        
+        .custom-download-btn i {
+            margin-right: 8px;
+        }
+        
+        footer {
+            background-color: #000;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-green);
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icon {
+            color: var(--text-gray);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-icon:hover {
+            color: var(--primary-blue);
+        }
+        
+        .copyright {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+       @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            nav ul li {
+                margin-left: 1.5rem;
+            }
+            
+            nav ul li a.nav-download {
+                padding: 0.5rem 1.2rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .mobile-frame {
+                width: 250px;
+            }
+            
+            .tablet-frame {
+                width: 450px;
+            }
+            
+            .tv-frame {
+                width: 100%;
+            }
+            
+            .screenshot-slider {
+                gap: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">SupaMax</div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#screenshots">Screenshots</a></li>
+                <li><a href="#content">Content</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#download" class="nav-download">Download</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#screenshots">Screenshots</a></li>
+            <li><a href="#content">Content</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#download" class="nav-download">Download</a></li>
+        </ul>
+    </div>
+    
+    <section class="hero">
+        <h1>Home of Entertainment</h1>
+        <p>Stream thousands of movies, TV shows, and live TV channels anytime, anywhere. All in one app with premium quality and personalized recommendations.</p>
+        <div class="cta-buttons">
+            <a href="#download" class="btn btn-primary">Get Started</a>
+            <a href="#pricing" class="btn btn-secondary">View Plans</a>
+        </div>
+    </section>
+    
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose SupaMax</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h3>10,000+ Titles</h3>
+                <p>Massive library of movies, TV series, documentaries, and more, with new content added weekly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tv"></i>
+                </div>
+                <h3>Live TV Channels</h3>
+                <p>Access to 200+ live TV channels including news, sports, entertainment, and kids programming.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Watch Anywhere</h3>
+                <p>Stream on your phone, tablet, laptop, or TV with seamless switching between devices.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <h3>Offline Viewing</h3>
+                <p>Download your favorite shows and movies to watch without an internet connection.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <h3>Multiple Profiles</h3>
+                <p>Create up to 5 profiles with personalized recommendations for each family member.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <h3>4K HDR Quality</h3>
+                <p>Experience stunning picture quality with 4K Ultra HD and High Dynamic Range support.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="screenshots" id="screenshots">
+        <h2 class="section-title">App Screenshots</h2>
+        <div class="device-tabs">
+            <button class="device-tab active" data-device="mobile">Mobile</button>
+            <button class="device-tab" data-device="tablet">Tablet</button>
+            <button class="device-tab" data-device="tv">TV</button>
+        </div>
+        
+        <div class="screenshot-container active" id="mobile-screenshots">
+            <div class="screenshot-slider">
+                <div class="device-frame mobile-frame">
+                    <img src="./imgs/phone/screenshots (1).png" alt="SupaMax Mobile Home">
+                </div>
+                <div class="device-frame mobile-frame">
+                    <img src="./imgs/phone/screenshots (2).png" alt="SupaMax Mobile Browse">
+                </div>
+                <div class="device-frame mobile-frame">
+                    <img src="./imgs/phone/screenshots (3).png" alt="SupaMax Mobile Player">
+                </div>
+            </div>
+        </div>
+        
+        <div class="screenshot-container" id="tablet-screenshots">
+            <div class="screenshot-slider">
+                <div class="device-frame tablet-frame">
+                    <img src="./imgs/tablet/screenshots (1).png" alt="SupaMax Tablet Home">
+                </div>
+                <div class="device-frame tablet-frame">
+                    <img src="./imgs/tablet/screenshots (2).png" alt="SupaMax Tablet Browse">
+                </div>
+                <div class="device-frame tablet-frame">
+                    <img src="./imgs/tablet/screenshots (3).png" alt="SupaMax Tablet Player">
+                </div>
+            </div>
+        </div>
+        
+        <div class="screenshot-container" id="tv-screenshots">
+            <div class="screenshot-slider">
+                <div class="device-frame tv-frame">
+                    <img src="./imgs/tv/screenshots (1).png" alt="SupaMax TV Home">
+                </div>
+                <div class="device-frame tv-frame">
+                    <img src="./imgs/tv/screenshots (2).png" alt="SupaMax TV Browse">
+                </div>
+                <div class="device-frame tv-frame">
+                    <img src="./imgs/tv/screenshots (3).png" alt="SupaMax TV Player">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-showcase" id="content">
+        <h2 class="section-title">Popular Content</h2>
+        <div class="content-grid">
+            <div class="content-item">
+                <img src="./imgs/phone/content (1).png" alt="Movie Poster">
+                <div class="content-overlay">
+                    <h4>LIVE TV</h4>
+                </div>
+            </div>
+            <div class="content-item">
+                <img src="./imgs/phone/content (2).png" alt="Movie Poster">
+                <div class="content-overlay">
+                    <h4>MOVIES</h4>
+                </div>
+            </div>
+            <div class="content-item">
+                <img src="./imgs/phone/content (3).png" alt="Movie Poster">
+                <div class="content-overlay">
+                    <h4>MOVIE TRAILERS</h4>
+                </div>
+            </div>
+            <div class="content-item">
+                <img src="./imgs/phone/content (4).png" alt="Movie Poster">
+                <div class="content-overlay">
+                    <h4>MOVIE DETAILS</h4>
+                </div>
+            </div>
+            <div class="content-item">
+                <img src="./imgs/phone/content (5).png" alt="Movie Poster">
+                <div class="content-overlay">
+                    <h4>MOVIE UPDATES</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Choose Your Plan</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Basic</h3>
+                <div class="price">$0.00 <span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>HD Available</li>
+                    <li>10 downloads a day</li>
+                    <li>10,000+ movies & TV shows</li>
+                </ul>
+                <a href="./download/download.html" class="btn btn-secondary">Download To Select Plan</a>
+            </div>
+            <div class="pricing-card popular">
+                <div class="popular-tag">Most Popular</div>
+                <h3>Standard</h3>
+                <div class="price">$0.50 <span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Full HD Available</li>
+                    <li>20 download a day</li>
+                    <li>All movies & TV shows</li>
+                </ul>
+                <a href="./download/download.html" class="btn btn-primary">Download To Select Plan</a>
+            </div>
+            <div class="pricing-card">
+                <h3>Premium</h3>
+                <div class="price">$1.00 <span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Ultra HD Available</li>
+                    <li>Unlimited downloads</li>
+                    <li>All movies & TV shows</li>
+                </ul>
+                <a href="./download/download.html" class="btn btn-secondary">Download To Select Plan</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="download" id="download">
+        <h2 class="section-title">Download SupaMax Now</h2>
+        <p>Get instant access to unlimited entertainment on all your devices</p>
+        <a href="download/download.html" class="custom-download-btn">
+            <i class="fas fa-download"></i> Download App
+        </a>
+    </section>
+    
+    <footer>
+        <div class="footer-links">
+            <a href="#">Home</a>
+            <a href="#features">Features</a>
+            <a href="#screenshots">Screenshots</a>
+            <a href="#content">Content</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#">Help Center</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p class="copyright">© 2025 SupaMax. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        const mobileLinks = mobileNav.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+            });
+        });
+        
+        // Device tabs functionality
+        const deviceTabs = document.querySelectorAll('.device-tab');
+        const screenshotContainers = document.querySelectorAll('.screenshot-container');
+        
+        deviceTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and containers
+                deviceTabs.forEach(t => t.classList.remove('active'));
+                screenshotContainers.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding container
+                const device = tab.getAttribute('data-device');
+                document.getElementById(`${device}-screenshots`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
