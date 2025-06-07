@@ -31,6 +31,60 @@
             color: var(--text-light);
         }
         
+        /* Preloader Styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light-bg);
+            border-top-color: var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Lazy loading styles */
+        .lazy {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .lazy.loaded {
+            opacity: 1;
+        }
+        
+        /* Low-quality image placeholder */
+        .lazy-img {
+            filter: blur(5px);
+            transition: filter 0.3s ease;
+        }
+        
+        .lazy-img.loaded {
+            filter: blur(0);
+        }
+        
         header {
             background: linear-gradient(135deg, var(--dark-blue), var(--dark-green));
             padding: 1rem 2rem;
@@ -137,7 +191,7 @@
         .hero {
             padding: 8rem 2rem 4rem;
             text-align: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');
             background-size: cover;
             background-position: center;
             min-height: 80vh;
@@ -145,6 +199,13 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+        }
+        
+        /* Responsive background images */
+        @media (min-width: 768px) {
+            .hero {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            }
         }
         
         .hero h1 {
@@ -375,113 +436,7 @@
         .device-frame img {
             width: 100%;
             display: block;
-        }
-        
-        .device-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            gap: 1rem;
-        }
-        
-        .device-tab {
-            padding: 0.8rem 1.5rem;
-            background-color: var(--light-bg);
-            border: none;
-            border-radius: 30px;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .device-tab.active {
-            background-color: var(--primary-blue);
-        }
-        
-        .device-tab:hover {
-            background-color: var(--dark-blue);
-        }
-        
-        .screenshot-container {
-            display: none;
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .screenshot-container.active {
-            display: block;
-        }
-        
-        .device-screenshot {
-            max-width: 100%;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            display: none;
-        }
-        
-        .device-screenshot.active {
-            display: inline-block;
-        }
-        
-        /* Device frame styles */
-        .mobile-frame {
-            max-width: 300px;
-            border: 12px solid #111;
-            border-radius: 30px;
-            position: relative;
-        }
-        
-        .mobile-frame::before {
-            content: '';
-            position: absolute;
-            top: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 20px;
-            background: #111;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-        
-        .tablet-frame {
-            max-width: 600px;
-            border: 15px solid #111;
-            border-radius: 20px;
-            position: relative;
-        }
-        
-        .tablet-frame::before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 6px;
-            background: #333;
-            border-radius: 3px;
-        }
-        
-        .tv-frame {
-            max-width: 800px;
-            border: 20px solid #111;
-            border-radius: 10px;
-            position: relative;
-        }
-        
-        .tv-frame::after {
-            content: '';
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 30px;
-            background: #111;
-            border-radius: 5px;
         }
         
         .content-showcase {
@@ -503,6 +458,7 @@
             position: relative;
             height: auto;
             transition: transform 0.3s;
+            aspect-ratio: 2/3; /* Standard poster aspect ratio */
         }
         
         .content-item:hover {
@@ -721,11 +677,21 @@
             .screenshot-slider {
                 gap: 1rem;
             }
+            
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preload" href="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" as="image">
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+    </div>
+    
     <header>
         <div class="logo">SupaMax</div>
         <button class="menu-toggle" id="menuToggle">
@@ -820,13 +786,28 @@
         <div class="screenshot-container active" id="mobile-screenshots">
             <div class="screenshot-slider">
                 <div class="device-frame mobile-frame">
-                    <img src="./imgs/phone/screenshots (1).png" alt="SupaMax Mobile Home">
+                    <img 
+                        src="./imgs/phone/screenshots (1).png" 
+                        alt="SupaMax Mobile Home" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
                 <div class="device-frame mobile-frame">
-                    <img src="./imgs/phone/screenshots (2).png" alt="SupaMax Mobile Browse">
+                    <img 
+                        src="./imgs/phone/screenshots (2).png" 
+                        alt="SupaMax Mobile Browse" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
                 <div class="device-frame mobile-frame">
-                    <img src="./imgs/phone/screenshots (3).png" alt="SupaMax Mobile Player">
+                    <img 
+                        src="./imgs/phone/screenshots (3).png" 
+                        alt="SupaMax Mobile Player" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
             </div>
         </div>
@@ -834,13 +815,28 @@
         <div class="screenshot-container" id="tablet-screenshots">
             <div class="screenshot-slider">
                 <div class="device-frame tablet-frame">
-                    <img src="./imgs/tablet/screenshots (1).png" alt="SupaMax Tablet Home">
+                    <img 
+                        src="./imgs/tablet/screenshots (1).png" 
+                        alt="SupaMax Tablet Home" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
                 <div class="device-frame tablet-frame">
-                    <img src="./imgs/tablet/screenshots (2).png" alt="SupaMax Tablet Browse">
+                    <img 
+                        src="./imgs/tablet/screenshots (2).png" 
+                        alt="SupaMax Tablet Browse" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
                 <div class="device-frame tablet-frame">
-                    <img src="./imgs/tablet/screenshots (3).png" alt="SupaMax Tablet Player">
+                    <img 
+                        src="./imgs/tablet/screenshots (3).png" 
+                        alt="SupaMax Tablet Player" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
             </div>
         </div>
@@ -848,13 +844,28 @@
         <div class="screenshot-container" id="tv-screenshots">
             <div class="screenshot-slider">
                 <div class="device-frame tv-frame">
-                    <img src="./imgs/tv/screenshots (1).png" alt="SupaMax TV Home">
+                    <img 
+                        src="./imgs/tv/screenshots (1).png" 
+                        alt="SupaMax TV Home" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
                 <div class="device-frame tv-frame">
-                    <img src="./imgs/tv/screenshots (2).png" alt="SupaMax TV Browse">
+                    <img 
+                        src="./imgs/tv/screenshots (2).png" 
+                        alt="SupaMax TV Browse" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
                 <div class="device-frame tv-frame">
-                    <img src="./imgs/tv/screenshots (3).png" alt="SupaMax TV Player">
+                    <img 
+                        src="./imgs/tv/screenshots (3).png" 
+                        alt="SupaMax TV Player" 
+                        loading="lazy"
+                        class="lazy lazy-img"
+                    >
                 </div>
             </div>
         </div>
@@ -864,31 +875,56 @@
         <h2 class="section-title">Popular Content</h2>
         <div class="content-grid">
             <div class="content-item">
-                <img src="./imgs/phone/content (1).png" alt="Movie Poster">
+                <img 
+                    src="./imgs/phone/content (1).png" 
+                    alt="LIVE TV" 
+                    loading="lazy"
+                    class="lazy lazy-img"
+                >
                 <div class="content-overlay">
                     <h4>LIVE TV</h4>
                 </div>
             </div>
             <div class="content-item">
-                <img src="./imgs/phone/content (2).png" alt="Movie Poster">
+                <img 
+                    src="./imgs/phone/content (2).png" 
+                    alt="MOVIES" 
+                    loading="lazy"
+                    class="lazy lazy-img"
+                >
                 <div class="content-overlay">
                     <h4>MOVIES</h4>
                 </div>
             </div>
             <div class="content-item">
-                <img src="./imgs/phone/content (3).png" alt="Movie Poster">
+                <img 
+                    src="./imgs/phone/content (3).png" 
+                    alt="MOVIE TRAILERS" 
+                    loading="lazy"
+                    class="lazy lazy-img"
+                >
                 <div class="content-overlay">
                     <h4>MOVIE TRAILERS</h4>
                 </div>
             </div>
             <div class="content-item">
-                <img src="./imgs/phone/content (4).png" alt="Movie Poster">
+                <img 
+                    src="./imgs/phone/content (4).png" 
+                    alt="MOVIE DETAILS" 
+                    loading="lazy"
+                    class="lazy lazy-img"
+                >
                 <div class="content-overlay">
                     <h4>MOVIE DETAILS</h4>
                 </div>
             </div>
             <div class="content-item">
-                <img src="./imgs/phone/content (5).png" alt="Movie Poster">
+                <img 
+                    src="./imgs/phone/content (5).png" 
+                    alt="MOVIE UPDATES" 
+                    loading="lazy"
+                    class="lazy lazy-img"
+                >
                 <div class="content-overlay">
                     <h4>MOVIE UPDATES</h4>
                 </div>
@@ -962,6 +998,14 @@
     </footer>
 
     <script>
+        // Preloader
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+            }, 1000); // Show for at least 1 second
+        });
+        
         // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
         const mobileNav = document.getElementById('mobileNav');
@@ -996,6 +1040,49 @@
                 document.getElementById(`${device}-screenshots`).classList.add('active');
             });
         });
+        
+        // Lazy loading images
+        document.addEventListener('DOMContentLoaded', function() {
+            const lazyImages = [].slice.call(document.querySelectorAll('img.lazy'));
+            
+            if ('IntersectionObserver' in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src || lazyImage.src;
+                            lazyImage.classList.remove('lazy');
+                            lazyImage.classList.add('loaded');
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            } else {
+                // Fallback for browsers without IntersectionObserver
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImage.src = lazyImage.dataset.src || lazyImage.src;
+                    lazyImage.classList.remove('lazy');
+                    lazyImage.classList.add('loaded');
+                });
+            }
+        });
+        
+        // Responsive background image loading
+        function loadResponsiveBackground() {
+            const hero = document.querySelector('.hero');
+            if (window.innerWidth >= 768) {
+                hero.style.backgroundImage = 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80")';
+            } else {
+                hero.style.backgroundImage = 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80")';
+            }
+        }
+        
+        // Load appropriate background image on resize
+        window.addEventListener('resize', loadResponsiveBackground);
     </script>
 </body>
 </html>
